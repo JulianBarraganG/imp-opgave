@@ -3,9 +3,11 @@
 {
     static public void Main(string[] args)
     {
-        int result = BitOperations.RightShift(8, 2);
-        Console.WriteLine($"The result of right shifting 8 by 2 is: {result}");
-    
+        MulShiftHash hash = new MulShiftHash();
+        Int64 x = 2;
+        Int64 result = hash.Hash(x);
+        Console.WriteLine($"Hash value of {x} is: {result}");
+
 
     }
 }
