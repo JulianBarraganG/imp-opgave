@@ -1,41 +1,72 @@
+using System.Diagnostics;
 public class Opg3
 {
     public static void Run()
     {
+        Stopwatch sw = new Stopwatch();
 
-        UInt16 l = 16;
-        int n = 94967298; 
-        Tuple<ulong, int>[] stream = Stream.CreateStream(n, l).ToArray();
-        MulShiftHash mulShiftHash = new MulShiftHash(l);
-
-        HashTable hashTable = populateHashTable(mulShiftHash.Hash, stream, l);
-        Int64 sum = 0;
-
-        foreach (var list in hashTable.table)
+        UInt16[] l_values = { 2, 4, 6, 8, 16, 20};
+        int n = (1<<20) + 1;
+        Console.WriteLine($"For all experiments, we are using n = {n}");
+        foreach (UInt16 l in l_values)
         {
-            if (list != null)
+            Tuple<ulong, int>[] stream = Stream.CreateStream(n, l).ToArray();
+
+            Console.WriteLine($"For l = {l}");
+            sw.Restart();
+            MulShiftHash mulShiftHash = new MulShiftHash(l);
+
+
+            HashTable shifthashTable = populateHashTable(mulShiftHash.Hash, stream, l);
+            Int64 shiftsum = 0;
+
+            foreach (var list in shifthashTable.table)
             {
-                foreach (var item in list)
+                if (list != null)
                 {
-                    sum += item.Item2 * item.Item2;
+                    foreach (var item in list)
+                    {
+                        shiftsum += item.Item2 * item.Item2;
+                    }
                 }
             }
+            sw.Stop();
+            Console.WriteLine($"MulShiftHas spent {sw.ElapsedMilliseconds} ms");
+
+            sw.Restart();
+            MulModPrimeHash mulModPrimeHash = new MulModPrimeHash(l);
+
+
+            HashTable modhashTable = populateHashTable(mulModPrimeHash.Hash, stream, l);
+            Int64 modsum = 0;
+
+            foreach (var list in modhashTable.table)
+            {
+                if (list != null)
+                {
+                    foreach (var item in list)
+                    {
+                        modsum += item.Item2 * item.Item2;
+                    }
+                }
+            }
+            sw.Stop();
+            Console.WriteLine($"MulModPrime Has spent {sw.ElapsedMilliseconds} ms");
+
         }
 
-        Console.WriteLine($"Sum: {sum}");
 
     }
 
     public static HashTable populateHashTable(Func<Int64, UInt64> h, Tuple<ulong, int>[] dataStream, int l)
     {
         HashTable hashTable = new HashTable(h, l);
-        Console.WriteLine($"HashTable size: {hashTable.table.Length}");
         foreach (var item in dataStream)
         {
             hashTable.increment((Int64)item.Item1, item.Item2);
         }
         return hashTable;
     }
-        
+
 
 }
