@@ -13,7 +13,6 @@ public class MulShiftHash
         this.rnd = new Random();
         // Set the values of a and l
         this.a = (rnd.NextInt64() << 1) - 1;
-        Console.WriteLine($"a: {a}");
         this.l = (UInt16)rnd.Next(1, 64);
     }
 

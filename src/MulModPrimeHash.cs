@@ -1,6 +1,5 @@
 using System.Numerics;
 using System.Security.Cryptography;
-using System;
 
 public class MulModPrimeHash
 // This class implements a hash function that combines multiplication and bit shifting.
