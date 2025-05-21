@@ -1,29 +1,65 @@
+using System.Numerics;
+using System.Security.Cryptography;
+using System;
+
 public class MulModPrimeHash
 // This class implements a hash function that combines multiplication and bit shifting.
 {
 
     private readonly Random rnd;
-    private readonly int p;
-    private readonly int a;
-    private readonly int b;
-    private readonly int l;
+    private readonly BigInteger p;
+    private readonly BigInteger a;
+    private readonly BigInteger b;
+    private readonly Int16 l;
 
     public MulModPrimeHash()
     {
-        Console.WriteLine("MulModPrimeHash constructor called");
         rnd = new Random();
-        this.p = Convert.ToInt32(Math.Pow(2, 13)) - 1;
-        this.a = rnd.Next(p);
-        this.b = rnd.Next(p);
-        this.l = rnd.Next(1, 64);
+        this.p = (BigInteger) Math.Pow(2, 89) - 1;
+        this.a = Gen89BitRnd();
+        this.b = Gen89BitRnd();
         
-    }    
+        this.l = (Int16) rnd.Next(1, 64);
+    }
     
-
-    public int Hash(int x)
+    private BigInteger Gen89BitRnd()
     {
-        Console.WriteLine($"a: {a}, b: {b}, l: {l}");
+        const int bitLength = 89;
+        int byteLength = (bitLength + 7) / 8; // 89 bits → 12 bytes (96 bits, but we'll mask later)
+
+        byte[] randomBytes = new byte[byteLength];
+
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomBytes);
+        }
+
+        // Mask the highest byte to ensure only 89 bits are used
+        int excessBits = (byteLength * 8) - bitLength;
+        if (excessBits > 0)
+        {
+            byte mask = (byte)(0xFF >> excessBits);
+            randomBytes[^1] &= mask; // Apply mask to the last byte
+        }
+
+        // Convert to BigInteger (unsigned, little-endian)
+        BigInteger result = new BigInteger(randomBytes, isUnsigned: true, isBigEndian: false);
+
+        if (result == p)
+        {
+            return Gen89BitRnd();
+        }
+        return result;
+    }
+
+
+    public Int64 Hash(Int64 x)
+    {
         // Perform a multiplication followed by a right shift
-        return ((a * x + b) % p) % (Convert.ToInt32(Math.Pow(2, l)));
+        BigInteger bigX = new BigInteger(x);
+        BigInteger hashValue = (a * bigX + b) % p;
+        BigInteger modValue =(BigInteger) Math.Pow(2, l);
+
+        return (Int64)(hashValue % modValue);
     }
 }

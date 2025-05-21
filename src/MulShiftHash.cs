@@ -7,18 +7,18 @@ public class MulShiftHash
 
     private readonly Random rnd;
 
+    
     public MulShiftHash()
     {
         this.rnd = new Random();
         // Set the values of a and l
         this.a = (rnd.NextInt64() << 1) - 1;
         Console.WriteLine($"a: {a}");
-        this.l = Convert.ToUInt16(rnd.Next(1, 64));
+        this.l = (UInt16)rnd.Next(1, 64);
     }
 
     public Int64 Hash(Int64 x)
     {   
-
         // Perform a multiplication followed by a right shift
         return (a * x) >> (64 - l);
     }
