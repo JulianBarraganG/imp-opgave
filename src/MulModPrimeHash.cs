@@ -9,16 +9,16 @@ public class MulModPrimeHash
     private readonly BigInteger p;
     private readonly BigInteger a;
     private readonly BigInteger b;
-    private readonly Int16 l;
+    private readonly UInt16 l;
 
-    public MulModPrimeHash()
+    public MulModPrimeHash(UInt16 l )
     {
         rnd = new Random();
         this.p = (BigInteger) Math.Pow(2, 89) - 1;
         this.a = Gen89BitRnd();
         this.b = Gen89BitRnd();
-        
-        this.l = (Int16) rnd.Next(1, 64);
+
+        this.l = l;
     }
     
     private BigInteger Gen89BitRnd()
@@ -52,13 +52,13 @@ public class MulModPrimeHash
     }
 
 
-    public Int64 Hash(Int64 x)
+    public UInt64 Hash(Int64 x)
     {
         // Perform a multiplication followed by a right shift
         BigInteger bigX = new BigInteger(x);
         BigInteger hashValue = (a * bigX + b) % p;
-        BigInteger modValue =(BigInteger) Math.Pow(2, l);
+        UInt64 modValue = (UInt64) 1 << l; 
 
-        return (Int64)(hashValue % modValue);
+        return (UInt64)(hashValue % modValue);
     }
 }

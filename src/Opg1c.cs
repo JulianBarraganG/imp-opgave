@@ -1,15 +1,17 @@
 using System.Diagnostics;
+using System.Numerics;
 public static class Opg1c
 {
-    public static void Run(int n = 1280000, int l = 32)
+    public static void Run(int n = 1280000, UInt16 l = 32)
     {
-        MulModPrimeHash modHash = new MulModPrimeHash();
-        MulShiftHash shiftHash = new MulShiftHash();
+        
+        MulModPrimeHash modHash = new MulModPrimeHash(l);
+        MulShiftHash shiftHash = new MulShiftHash(l);
 
         Tuple<ulong, int>[] stream = Stream.CreateStream(n, l).ToArray();
 
-        Int64 modSum = 0;
-        Int64 shiftSum = 0;
+        UInt64 modSum = 0;
+        UInt64 shiftSum = 0;
 
         Stopwatch sw = new Stopwatch();
         sw.Start();
