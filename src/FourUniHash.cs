@@ -23,6 +23,7 @@ public class FourUniHash
 		// Assign values to pre-allocated array
 		this.aArray[0] = this.a0;
 		this.aArray[1] = this.a1;
+		this.aArray[2] = this.a2;
 		this.aArray[3] = this.a3;
 	}
 
@@ -41,10 +42,10 @@ public class FourUniHash
 		// Initialization
 		BigInteger y = aArray[3];
 		BigInteger xBig = (BigInteger)x;
-		for (short i = 2; i >= 0; i--) {
+		for (Int16 i = 2; i >= 0; i--) {
 			BigInteger prod = y * xBig;
 			y = prod + aArray[i];
-			y = (y & x) + (y >> this.q);
+			y = (y & this.p) + (y >> this.q);
 		}
 		if (y >= this.p) {
 			y = y - this.p;
@@ -76,7 +77,7 @@ public class FourUniHash
 	public Int32 CountSketch(Int32[] sketch) {
 		Int32 sum = 0;
 		for (UInt64 i = 0; i < this.m; i++) {
-			sum += sketch[i]*sketch[i];
+			sum += (sketch[i]*sketch[i]);
 		}
 		return sum;
 	}

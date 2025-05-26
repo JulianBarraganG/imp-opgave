@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Security.Cryptography;
 
-public class Utils() {
+public class Utils{
 	private readonly BigInteger p = (BigInteger) Math.Pow(2, 89) - 1;
 
 	public BigInteger Gen89BitRnd() {
