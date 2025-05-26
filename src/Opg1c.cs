@@ -18,7 +18,7 @@ public static class Opg1c
 
         foreach (var item in stream)
         {
-            modSum += modHash.Hash((Int64)item.Item1);
+            modSum += modHash.Hash((UInt64)item.Item1);
         }
         sw.Stop();
         Console.WriteLine($"Mod Hash Time: {sw.ElapsedMilliseconds} ms");
@@ -27,7 +27,7 @@ public static class Opg1c
 
         foreach (var item in stream)
         {
-            shiftSum += shiftHash.Hash((Int64)item.Item1);
+            shiftSum += shiftHash.Hash((UInt64)item.Item1);
         }
         sw.Stop();
         Console.WriteLine($"Shift Hash Time: {sw.ElapsedMilliseconds} ms");

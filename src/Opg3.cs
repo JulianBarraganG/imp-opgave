@@ -58,12 +58,12 @@ public class Opg3
 
     }
 
-    public static HashTable populateHashTable(Func<Int64, UInt64> h, Tuple<ulong, int>[] dataStream, int l)
+    public static HashTable populateHashTable(Func<UInt64, UInt64> h, Tuple<ulong, int>[] dataStream, int l)
     {
         HashTable hashTable = new HashTable(h, l);
         foreach (var item in dataStream)
         {
-            hashTable.increment((Int64)item.Item1, item.Item2);
+            hashTable.increment(item.Item1, item.Item2);
         }
         return hashTable;
     }
