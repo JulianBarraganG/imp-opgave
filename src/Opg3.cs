@@ -1,4 +1,5 @@
 using System.Diagnostics;
+
 public class Opg3
 {
     public static void Run()

@@ -7,10 +7,7 @@ public class Program
     {
 
 	// Opg3.Run();
-	FourUniHash HashFour = new FourUniHash();
-	Console.WriteLine(HashFour.Hashing(x));
-
-
+	Opg7.Run();
     }
 
 }
