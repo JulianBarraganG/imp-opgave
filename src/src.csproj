@@ -9,4 +9,7 @@
   <ItemGroup>
       <Reference Include="System.Numerics" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ScottPlot" Version="5.0.55" />
+  </ItemGroup>
 </Project>
