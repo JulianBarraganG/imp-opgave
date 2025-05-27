@@ -1,4 +1,5 @@
 *.pdf
+*.png
 src/obj/
 src/bin/
 src/src.csproj
