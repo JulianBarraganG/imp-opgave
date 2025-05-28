@@ -9,8 +9,8 @@ public class FourUniHash
 	private readonly BigInteger a1;
 	private readonly BigInteger a2;
 	private readonly BigInteger a3;
-	private readonly BigInteger[] aArray = new BigInteger[4]; // Pre-allocated array
-	private readonly Int16 q = 89; // Marsenne exponent, 89 for imp
+	private readonly BigInteger[] aArray = new BigInteger[4]; // Pre-allocated array of a_i-s
+	private readonly Int16 q = 89; // Marsenne exponent, 89 for this assignment
 	private readonly BigInteger p;
 	private UInt64 m; 
 
@@ -82,7 +82,7 @@ public class FourUniHash
 				sum += (sketch[i] * sketch[i]);
 			}
 		}
-		return sum;
+		return sum; // I.e. X
 	}
 }
 
