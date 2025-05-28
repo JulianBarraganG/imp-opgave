@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 
 public class FourUniHash 
@@ -42,7 +43,7 @@ public class FourUniHash
 		// Initialization
 		BigInteger y = aArray[3];
 		BigInteger xBig = (BigInteger)x;
-		for (Int16 i = 2; i >= 0; i--) {
+		for (Int16 i = 2; i >= 0; i--) { 		// Horner's rule
 			BigInteger prod = y * xBig;
 			y = prod + aArray[i];
 			y = (y & this.p) + (y >> this.q);
@@ -61,7 +62,6 @@ public class FourUniHash
 		}
 
 		this.m = 1UL << t; // m = 2^t
-
 		// Initialize array
 		Int32[] C = new Int32[this.m];
 		foreach (var item in data) {
@@ -77,7 +77,10 @@ public class FourUniHash
 	public Int32 CountSketch(Int32[] sketch) {
 		Int32 sum = 0;
 		for (UInt64 i = 0; i < this.m; i++) {
-			sum += (sketch[i]*sketch[i]);
+			if (sketch[i] != 0)
+			{
+				sum += (sketch[i] * sketch[i]);
+			}
 		}
 		return sum;
 	}
