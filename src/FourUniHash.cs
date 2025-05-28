@@ -9,12 +9,11 @@ public class FourUniHash
 	private readonly BigInteger a2;
 	private readonly BigInteger a3;
 	private readonly BigInteger[] aArray = new BigInteger[4]; // Pre-allocated array of a_i-s
-	private readonly Int16 q = 89; // Marsenne exponent, 89 for this assignment
 	private readonly BigInteger p;
 	private UInt64 m; 
 
 	public FourUniHash() {
-		this.p = (BigInteger.One << this.q) - 1;
+		this.p = (BigInteger.One << 89) - 1;
 		this.a0 = this.utils.Gen89BitRnd();
 		this.a1 = this.utils.Gen89BitRnd();
 		this.a2 = this.utils.Gen89BitRnd();
@@ -32,8 +31,7 @@ public class FourUniHash
 		// Initialization
 		BigInteger gx = this.g(x);
 		UInt64 hx = (UInt64)(gx & (this.m - 1));
-		Int16 shiftVal = (Int16) (this.q - 1); // 88
-		Int16 bx = (Int16) (gx >> shiftVal); // bx is either 0 or 1;
+		Int16 bx = (Int16) (gx >> 88); // bx is either 0 or 1;
 		Int16 sx = (Int16)(1 - 2*bx); // -1 or 1
 		return (hx, sx);
 	}
@@ -46,7 +44,7 @@ public class FourUniHash
 		for (Int16 i = 2; i >= 0; i--) {
 			BigInteger prod = y * xBig;
 			y = prod + aArray[i];
-			y = (y & this.p) + (y >> this.q);
+			y = (y & this.p) + (y >> 89);
 		}
 		if (y >= this.p) {
 			y = y - this.p;
@@ -61,24 +59,28 @@ public class FourUniHash
 			throw new ArgumentOutOfRangeException(nameof(t), "t must be in the range [0, 64]");
 		}
 
-		this.m = 1UL << t; // m = 2^t
-
 		// Initialize array
+		this.m = 1UL << t; // m = 2^t
 		Int32[] C = new Int32[this.m];
-		foreach (var item in data) {
-			UInt64 x = item.Item1;
-			Int32 d = item.Item2;
-			// Get h(x) and s(x)
-			(UInt64 hx, Int16 sx) = this.GetHashingFuncs(x);
-			C[hx] += sx*d;
+
+		foreach (var item in data) 
+		{
+			var (hx, sx) = GetHashingFuncs(item.Item1);
+			C[hx] += sx * item.Item2;
 		}
+		
 		return C;
 	}
 
 	public Int32 CountSketch(Int32[] sketch) {
 		Int32 sum = 0;
-		for (UInt64 i = 0; i < this.m; i++) {
-			sum += (sketch[i]*sketch[i]);
+		for (UInt64 i = 0; i < this.m; i++)
+		{
+			if (sketch[i] == 0)
+			{
+				continue; // Skip zero values
+			}
+			sum += (sketch[i] * sketch[i]);
 		}
 		return sum; // I.e. X
 	}

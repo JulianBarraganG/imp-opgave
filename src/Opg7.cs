@@ -4,8 +4,8 @@ public class Opg7
 {
 	public static void Run()
 	{
-		Int32 n = (1 << 16) + 1;
-		Int32 l = 16;
+		Int32 n = (1 << 22);
+		Int32 l = 20;
 		UInt16[] t_values = { 6, 12, 24 }; 
 		Stopwatch sw = new Stopwatch();
 		Tuple<ulong, int>[] stream = Stream.CreateStream(n, l).ToArray();
@@ -35,15 +35,14 @@ public class Opg7
 		foreach (UInt16 t in t_values)
 		{
 
-			for (int i = 0; i < 100; i++)
+			Parallel.For(0, 100, i => 
 			{
-				if (i == 0) { sw.Restart(); }
 				FourUniHash hash = new FourUniHash();
 				Int32[] C = hash.GetSketch(stream, t);
 				Int32 estimate = hash.CountSketch(C);
-				if (i == 0) { sw.Stop(); }
 				X_estimates[i] = estimate;
-			}
+
+			});
 
 
 			Int32[] sorted_estimates = new Int32[100];

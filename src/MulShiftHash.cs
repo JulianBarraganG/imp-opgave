@@ -8,7 +8,7 @@ public class MulShiftHash
     private readonly Random rnd;
 
     
-    public MulShiftHash(UInt16 l )
+    public MulShiftHash(UInt16 l)
     {
         this.rnd = new Random();
         // Set the values of a and l
