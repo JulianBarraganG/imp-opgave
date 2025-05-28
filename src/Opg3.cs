@@ -32,6 +32,7 @@ public class Opg3
                 }
             }
             sw.Stop();
+            Console.WriteLine($"MulShiftHash sum is = {shiftsum}"); 
             Console.WriteLine($"MulShiftHas spent {sw.ElapsedMilliseconds} ms");
 
             sw.Restart();
@@ -52,6 +53,7 @@ public class Opg3
                 }
             }
             sw.Stop();
+            Console.WriteLine($"MulModPrimeHash sum is = {modsum}");
             Console.WriteLine($"MulModPrime Has spent {sw.ElapsedMilliseconds} ms");
 
         }
